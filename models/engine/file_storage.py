@@ -23,6 +23,9 @@ class FileStorage:
 
     def reload(self):
          from models.base_model import BaseModel
+         from models.user import User
+
+         classes =  {"BaseModel": BaseModel, "User": User,}
 
          if os.path.exists(self.__file_path):
             try:
@@ -32,6 +35,7 @@ class FileStorage:
                 raise e
             else:
                 for key, obj in objs.items():
-                    self.__objects[key] = BaseModel(**obj)
+                    class_name = key.split(".")[0]
+                    self.__objects[key] = classes[class_name](**obj)
          else:
             pass

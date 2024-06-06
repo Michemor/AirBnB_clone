@@ -7,6 +7,10 @@ Defines class HBNBCommand
 import cmd
 from models.base_model import BaseModel
 from models import storage
+from models.user import User
+
+classes =  {"BaseModel": BaseModel, "User": User,}
+
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb)"
@@ -35,10 +39,10 @@ class HBNBCommand(cmd.Cmd):
         and prints the id
         """
         if line:
-            if line != "BaseModel":
+            if line not in classes:
                 print("** class doesn't exist **")
             else:
-                obj = BaseModel()
+                obj = classes[line]()
                 obj.save()
                 print(obj.id)
         else:
@@ -52,7 +56,7 @@ class HBNBCommand(cmd.Cmd):
         args = line.split()
         if not line:
             print("** class name missing **")
-        elif args[0].strip() != "BaseModel":
+        elif not args[0].strip() in classes:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
@@ -73,7 +77,7 @@ class HBNBCommand(cmd.Cmd):
         args = line.split()
         if not line:
             print("** class name missing **")
-        elif args[0].strip() != "BaseModel":
+        elif not args[0].strip() in classes:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
@@ -93,7 +97,7 @@ class HBNBCommand(cmd.Cmd):
         args = line.split()
         # empty list but will store string representation of objects
         list_objs = []
-        if len(args) == 0 or args[0].strip() == "BaseModel":
+        if len(args) == 0 or not args[0].strip() in classes:
             for obj in storage.all().keys():
                 list_objs.append(str(storage.all()[obj]))
             print(list_objs)
@@ -109,7 +113,7 @@ class HBNBCommand(cmd.Cmd):
         args = line.split()
         if not line:
             print("** class name missing **")
-        elif args[0].strip() != "BaseModel":
+        elif not args[0].strip() in "BaseModel":
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
